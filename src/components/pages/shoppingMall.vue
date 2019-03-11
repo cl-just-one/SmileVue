@@ -16,9 +16,15 @@
         <div class="swipe-area">
             <van-swipe :autoplay="3000">
                 <van-swipe-item v-for="(banner, index) in bannerPicArray" :key="index">
-                    <img :src="banner.imageUrl">
+                    <img v-lazy="banner.imageUrl" />
                 </van-swipe-item>
             </van-swipe>
+        </div>
+        <div class="type-bar">
+            <div v-for="(cate, index) in category" :key="index">
+                <img v-lazy="cate.image" width="90%">
+                <span>{{cate.mallCategoryName}}</span>
+            </div>
         </div>
     </div>
 </template>
@@ -35,7 +41,7 @@
                     {imageUrl:'https://aecpm.alicdn.com/simba/img/TB14ab1KpXXXXclXFXXSutbFXXX.jpg_q50.jpg'},
                     {imageUrl:'https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg'},
                 ],
-                categroy: []
+                category: []
             }
         },
         created() {
@@ -43,7 +49,9 @@
                 url: "https://www.easy-mock.com/mock/5c85c410a37c3b12bb906f52/index/index",
                 method: "get"
             }).then(response => {
-                console.log(response);
+                if (response.status == 200) {
+                    this.category = response.data.data.category;
+                }
             }).catch(error => {
                 console.log(error);
             })
@@ -77,5 +85,19 @@
         clear: both;
         max-height: 15rem;
         overflow: hidden;
+    }
+    .type-bar {
+        background-color: #fff;
+        margin: 0 .3rem .3rem .3rem;
+        border-radius: .3rem;
+        font-size: 14px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+    .type-bar div {
+        padding: .3rem;
+        font-size: 12px;
+        text-align: center;
     }
 </style>
