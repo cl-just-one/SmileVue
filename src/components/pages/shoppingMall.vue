@@ -16,7 +16,7 @@
         <div class="swipe-area">
             <van-swipe :autoplay="3000">
                 <van-swipe-item v-for="(banner, index) in bannerPicArray" :key="index">
-                    <img v-lazy="banner.imageUrl" />
+                    <img v-lazy="banner.image" width="100%"/>
                 </van-swipe-item>
             </van-swipe>
         </div>
@@ -25,6 +25,15 @@
                 <img v-lazy="cate.image" width="90%">
                 <span>{{cate.mallCategoryName}}</span>
             </div>
+        </div>
+        <!--adbanner area-->
+        <div class="adbanner-area">
+            <img v-lazy="adBanner" width="100%" />
+        </div>
+        <!--recommend-->
+        <div class="recommend-area">
+            <div class="recommend-title">商品推荐</div>
+            <div class="recommend-body"></div>
         </div>
     </div>
 </template>
@@ -36,12 +45,9 @@
             return {
                 msg: 'Shopping Mall',
                 locationImg: require('../../assets/images/location.png'),
-                bannerPicArray:[
-                    {imageUrl:'https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg'},
-                    {imageUrl:'https://aecpm.alicdn.com/simba/img/TB14ab1KpXXXXclXFXXSutbFXXX.jpg_q50.jpg'},
-                    {imageUrl:'https://aecpm.alicdn.com/simba/img/TB1CWf9KpXXXXbuXpXXSutbFXXX.jpg_q50.jpg'},
-                ],
-                category: []
+                bannerPicArray: [],
+                category: [],
+                adBanner: ''
             }
         },
         created() {
@@ -51,6 +57,8 @@
             }).then(response => {
                 if (response.status == 200) {
                     this.category = response.data.data.category;
+                    this.adBanner = response.data.data.advertesPicture.PICTURE_ADDRESS;
+                    this.bannerPicArray = response.data.data.slides;
                 }
             }).catch(error => {
                 console.log(error);
@@ -83,7 +91,7 @@
     }
     .swipe-area {
         clear: both;
-        max-height: 15rem;
+        width: 20rem;
         overflow: hidden;
     }
     .type-bar {
@@ -99,5 +107,15 @@
         padding: .3rem;
         font-size: 12px;
         text-align: center;
+    }
+    .recommend-area {
+        background-color: #fff;
+        margin-top: .3rem;
+    }
+    .recommend-title {
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+        padding: .2rem;
+        color: #e5017d;
     }
 </style>
