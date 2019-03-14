@@ -16,7 +16,7 @@
         <div class="swipe-area">
             <van-swipe :autoplay="3000">
                 <van-swipe-item v-for="(banner, index) in bannerPicArray" :key="index">
-                    <img v-lazy="banner.image" width="100%"/>
+                    <img v-lazy="banner.image" width="99%"/>
                 </van-swipe-item>
             </van-swipe>
         </div>
@@ -33,22 +33,52 @@
         <!--recommend-->
         <div class="recommend-area">
             <div class="recommend-title">商品推荐</div>
-            <div class="recommend-body"></div>
+            <div class="recommend-body">
+                <swiper :options="swiperOption">
+                    <swiper-slide v-for="(item, idx) in recommendGoods" :key="idx">
+                        <div class="recommend-item">
+                            <img :src="item.image" width="80%">
+                            <div>{{item.goodsName}}</div>
+                            <div>￥{{item.price}}(￥{{item.mallPrice}})</div>
+                        </div>
+                    </swiper-slide>
+                </swiper>
+            </div>
         </div>
+        <floorComponent :floorData="floor1" :floorTitle="floorName.floor1"></floorComponent>
+        <floorComponent :floorData="floor2" :floorTitle="floorName.floor2"></floorComponent>
+        <floorComponent :floorData="floor3" :floorTitle="floorName.floor3"></floorComponent>
     </div>
 </template>
 
 <script>
     import axios from 'axios';
+    import 'swiper/dist/css/swiper.css';
+    import {swiper, swiperSlide} from 'vue-awesome-swiper'
+    import floorComponent from '../component/floorcomponent'
+
     export default {
         data() {
             return {
+                swiperOption: {
+                    slidesPerView: 3
+                },
                 msg: 'Shopping Mall',
                 locationImg: require('../../assets/images/location.png'),
                 bannerPicArray: [],
                 category: [],
-                adBanner: ''
+                adBanner: '',
+                recommendGoods: [],
+                floor1: [],
+                floor2: [],
+                floor3: [],
+                floorName: {}
             }
+        },
+        components: {
+            swiper,
+            swiperSlide,
+            floorComponent
         },
         created() {
             axios({
@@ -59,6 +89,11 @@
                     this.category = response.data.data.category;
                     this.adBanner = response.data.data.advertesPicture.PICTURE_ADDRESS;
                     this.bannerPicArray = response.data.data.slides;
+                    this.recommendGoods = response.data.data.recommend;
+                    this.floor1 = response.data.data.floor1;
+                    this.floor2 = response.data.data.floor2;
+                    this.floor3 = response.data.data.floor3;
+                    this.floorName = response.data.data.floorName;
                 }
             }).catch(error => {
                 console.log(error);
@@ -117,5 +152,13 @@
         font-size: 14px;
         padding: .2rem;
         color: #e5017d;
+    }
+    .recommend-body {
+        border-bottom: 1px solid #eee;
+    }
+    .recommend-item {
+        width: "90%";
+        font-size: 12px;
+        text-align: center;
     }
 </style>
