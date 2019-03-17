@@ -24,12 +24,15 @@
             />
         </div>
         <div class="register-button">
-            <van-button type="primary" size="large">注册</van-button>
+            <van-button type="primary" @click="axiosRegisterUser" size="large">马上注册</van-button>
         </div>
     </div>
 </template>
 
 <script>
+    import axios from 'axios'
+    import url from '@/serviceAPI.config.js'
+    import { Toast } from 'vant'
     export default {
         data() {
             return {
@@ -40,6 +43,25 @@
         methods: {
             goBack() {
               this.$router.go(-1);  
+            },
+            axiosRegisterUser() {
+                axios({
+                    url: url.registerUser,
+                    method: 'post',
+                    data: {
+                        userName: this.username,
+                        password: this.password
+                    }
+                }).then((res) => {
+                    if (res.data.code == 200) {
+                        Toast.success('注册成功');
+                    } else {
+                        console.log(res.data.message);
+                        Toast.fail('注册失败')
+                    }
+                }).catch((err) => {
+                    Toast.fail('注册失败');
+                })
             }
         },
     }
