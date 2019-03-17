@@ -16,7 +16,7 @@
         <div class="swipe-area">
             <van-swipe :autoplay="3000">
                 <van-swipe-item v-for="(banner, index) in bannerPicArray" :key="index">
-                    <img v-lazy="banner.image" width="99%"/>
+                    <img v-lazy="banner.image" width="100%"/>
                 </van-swipe-item>
             </van-swipe>
         </div>
@@ -71,6 +71,7 @@
     import floorComponent from '../component/floorcomponent'
     import goodsInfo from '../component/goodsInfoComponent'
     import { toMoney } from '@/filter/moneyFilter'
+    import URL from "@/serviceAPI.config"
 
     export default {
         data() {
@@ -78,7 +79,6 @@
                 swiperOption: {
                     slidesPerView: 3
                 },
-                msg: 'Shopping Mall',
                 locationImg: require('../../assets/images/location.png'),
                 bannerPicArray: [],
                 category: [],
@@ -104,7 +104,7 @@
         },
         created() {
             axios({
-                url: "https://www.easy-mock.com/mock/5c85c410a37c3b12bb906f52/index/index",
+                url: URL.getShopingMallInfo,
                 method: "get"
             }).then(response => {
                 if (response.status == 200) {
@@ -173,7 +173,7 @@
     .recommend-title {
         border-bottom: 1px solid #eee;
         font-size: 14px;
-        padding: .2rem;
+        padding: .2rem .2rem .2rem .8rem;
         color: #e5017d;
     }
     .recommend-body {
