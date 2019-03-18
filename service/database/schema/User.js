@@ -10,6 +10,8 @@ const UserSchema = new Schema({
     password: String,
     createAt: { type: Date, default: Date.now() },
     lastLoginAt: { type: Date, default: Date.now() }
+}, {
+    collection: 'user'
 })
 
 // 每次存储数据时都要执行

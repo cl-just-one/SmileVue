@@ -14,6 +14,7 @@
                 placeholder="请输入用户名"
                 required
                 @click-icon="username = ''"
+                :error-message="usernameErrorMsg"
             />
             <van-field
                 v-model="password"
@@ -21,10 +22,15 @@
                 label="密码"
                 placeholder="请输入密码"
                 required
+                :error-message="passwordErrorMsg"
             />
         </div>
         <div class="register-button">
-            <van-button type="primary" @click="axiosRegisterUser" size="large">马上注册</van-button>
+            <van-button
+                type="primary"
+                @click="registerAction"
+                size="large"
+                :loading="openLoading">马上注册</van-button>
         </div>
     </div>
 </template>
@@ -37,14 +43,21 @@
         data() {
             return {
                 username: "",
-                password: ""
+                password: "",
+                openLoading: false,
+                usernameErrorMsg: "",
+                passwordErrorMsg: "",
             }
         },
         methods: {
             goBack() {
               this.$router.go(-1);  
             },
+            registerAction() {
+                this.checkForm() && this.axiosRegisterUser()
+            },
             axiosRegisterUser() {
+                this.openLoading = true;
                 axios({
                     url: url.registerUser,
                     method: 'post',
@@ -55,13 +68,32 @@
                 }).then((res) => {
                     if (res.data.code == 200) {
                         Toast.success('注册成功');
+                        this.$router.push('/');
                     } else {
                         console.log(res.data.message);
                         Toast.fail('注册失败')
+                        this.openLoading = false;
                     }
                 }).catch((err) => {
                     Toast.fail('注册失败');
+                    this.openLoading = false;
                 })
+            },
+            checkForm() {
+                let isOk = true;
+                if (this.username.length < 5) {
+                    this.usernameErrorMsg = "用户名不能少于5位"
+                    isOk = false;
+                } else {
+                    this.usernameErrorMsg = ""
+                }
+                if (this.password.length < 5) {
+                    this.passwordErrorMsg = "密码不能少于5位"
+                    isOk = false;
+                } else {
+                    this.passwordErrorMsg = ""
+                }
+                return isOk
             }
         },
     }
