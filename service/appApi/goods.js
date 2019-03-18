@@ -68,6 +68,22 @@ router.get('/insertAllCategorySub', async(ctx) => {
         })
     })
     ctx.body = '开始数据插入中'
+});
+
+// 获取商品详细信息接口
+router.post('/getDetailGoodsInfo', async(ctx) => {
+    let goodsId = ctx.request.body.goodsId;
+
+    const Goods = mongoose.model('Goods')
+    await Goods.findOne({ ID: goodsId }).exec().then(res => {
+        ctx.body = {
+            code: 200,
+            message: res
+        }
+    }).catch(error => {
+        console.log(error)
+        ctx.body = { code: 500, message: error }
+    })
 })
 
 module.exports = router
