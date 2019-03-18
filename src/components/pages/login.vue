@@ -49,6 +49,12 @@
                 passwordErrorMsg: "",
             }
         },
+        created() {
+            if (localStorage.userInfo) {
+                Toast.success('你已经登录')
+                this.$router.push('/')
+            }
+        },
         methods: {
             goBack() {
               this.$router.go(-1);  
@@ -66,12 +72,20 @@
                         password: this.password
                     }
                 }).then((res) => {
-                    if (res.data.code == 200) {
-                        console.log(res);
-                        Toast.success('登录成功');
-                        this.$router.push('/');
+                    if (res.data.code == 200 && res.data.message) {
+                        new Promise((resolve, reject) => {
+                            localStorage.userInfo = {
+                                userName: this.username
+                            }
+                            setTimeout(resolve(), 500)
+                        }).then(res => {
+                            Toast.success('登录成功');
+                            this.$router.push('/');
+                        }).catch(err => {
+                            Toast.success('登录信息记录失败');
+                            this.$router.push('/');
+                        })
                     } else {
-                        console.log(res.data.message);
                         Toast.fail('登录失败')
                         this.openLoading = false;
                     }
