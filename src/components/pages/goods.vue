@@ -6,8 +6,24 @@
             left-arrow
             @click-left="goHomePage"
         />
-        <div class="image-div">
+        <div class="goods-image">
             <img v-lazy="goodsInfo.IMAGE1" width="100%"/>
+        </div>
+        <div class="goods-name">{{goodsInfo.NAME}}</div>
+        <div class="goods-price">{{goodsInfo.PRESENT_PRICE}}</div>
+        <van-tabs swipeable sticky>
+            <van-tab title="商品详情">
+                <div class="goods-detail" v-html="goodsInfo.DETAIL"></div>
+            </van-tab>
+            <van-tab title="商品评论">商品评论制作中</van-tab>
+        </van-tabs>
+        <div class="goods-bottom-button">
+            <div class="bottom-button">
+                <van-button size="large" type="primary">加入购物车</van-button>
+            </div>
+            <div class="bottom-button">
+                <van-button size="large" type="danger">直接购买</van-button>
+            </div>
         </div>
     </div>
 </template>
@@ -49,10 +65,30 @@
             goHomePage() {
                 this.$router.go(-1)
             }
-        },
+        }
     }
 </script>
 
 <style scoped>
-
+    .goods-name,
+    .goods-price {
+        background-color: #fff;
+    }
+    .goods-detail {
+        font-size: 0;
+    }
+    .goods-bottom-button {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        background-color: #fff;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+    .bottom-button {
+        flex: 1;
+        padding: 5px;
+    }
 </style>
