@@ -49,6 +49,7 @@
                         this.$router.push({name: "Cart"})
                         break;
                     case 3:
+                        this.$router.push({name: "Member"})
                         break;
                     default:
                         break;
