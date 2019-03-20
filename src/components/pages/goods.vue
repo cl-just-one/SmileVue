@@ -10,7 +10,7 @@
             <img v-lazy="goodsInfo.IMAGE1" width="100%"/>
         </div>
         <div class="goods-name">{{goodsInfo.NAME}}</div>
-        <div class="goods-price">{{goodsInfo.PRESENT_PRICE}}</div>
+        <div class="goods-price">￥{{goodsInfo.PRESENT_PRICE | moneyFilter}}</div>
         <van-tabs swipeable sticky>
             <van-tab title="商品详情">
                 <div class="goods-detail" v-html="goodsInfo.DETAIL"></div>
@@ -32,11 +32,18 @@
     import axios from 'axios'
     import url from '@/serviceAPI.config.js'
     import {Toast} from 'vant'
+    import { toMoney } from '@/filter/moneyFilter'
+
     export default {
         data() {
             return {
                 goodsId: '',
                 goodsInfo: {}
+            }
+        },
+        filters: {
+            moneyFilter(money) {
+                return toMoney(money);
             }
         },
         created() {
@@ -112,6 +119,10 @@
     }
     .bottom-button {
         flex: 1;
+        padding: 5px;
+    }
+    .goods-name,
+    .goods-price {
         padding: 5px;
     }
 </style>
