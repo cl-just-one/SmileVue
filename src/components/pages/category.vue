@@ -85,8 +85,8 @@
         },
         mounted() {
             const winHeight = document.documentElement.clientHeight
-            document.getElementsByClassName("category-left")[0].style.height = (winHeight -46) + 'px'
-            document.getElementsByClassName("list-div")[0].style.height = (winHeight -90) + 'px'
+            document.getElementsByClassName("category-left")[0].style.height = (winHeight - 46 - 50) + 'px'
+            document.getElementsByClassName("list-div")[0].style.height = (winHeight - 90 - 50) + 'px'
         },
         filters: {
             moneyFilter(money) {
@@ -184,7 +184,7 @@
                     }
                 })
             }
-        },
+        }
     }
 </script>
 

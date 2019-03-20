@@ -15,16 +15,26 @@
                 <div class="pang-text">
                     <div class="pang-name">{{item.name}}</div>
                     <div class="pang-control">
-                        <van-stepper :count="item.count"/>
+                        <van-stepper v-model="item.count"/>
                     </div>
                 </div>
-                <div class="pang-goods-price">￥{{item.price}}</div>
+                <div class="pang-goods-price">
+                    <div>￥{{item.price | moneyFilter}}</div>
+                    <div>x{{item.count}}</div>
+                    <div class="allPrice">
+                        <div>￥{{item.price * item.count | moneyFilter}}</div>
+                    </div>
+                </div>
             </div>
+        </div>
+        <div class="totalPrice">
+            商品总价: ￥{{totalPrice | moneyFilter}}
         </div>
     </div>
 </template>
 
 <script>
+    import { toMoney } from '@/filter/moneyFilter.js'
     export default {
         data() {
             return {
@@ -34,6 +44,21 @@
         },
         created() {
             this.getCartInfo();
+        },
+        filters: {
+            moneyFilter(money) {
+                return toMoney(money);
+            }
+        },
+        computed: {
+            totalPrice() {
+                let allPrice = 0;
+                this.cartInfo.forEach((item, idx) => {
+                    allPrice += item.price * item.count
+                });
+                localStorage.cartInfo = JSON.stringify(this.cartInfo)
+                return allPrice
+            }
         },
         methods: {
             getCartInfo() {
@@ -82,6 +107,16 @@
     }
     .pang-goods-price{
         flex:4;
+        text-align: right;
+    }
+    .allPrice {
+        color: red
+    }
+    .totalPrice {
+        height: 2rem;
+        line-height: 2rem;
+        font-size: .85rem;
+        padding: 5px;
         text-align: right;
     }
 </style>
